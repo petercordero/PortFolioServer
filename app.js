@@ -6,8 +6,10 @@ var logger = require('morgan');
 var mongoose = require('mongoose')
 var cors = require('cors')
 
-var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authRouter = require('./routes/auth');
+var portfoliosRouter = require('./routes/portfolios')
+var projectsRouter = require('./routes/projects')
 
 var app = express();
 
@@ -29,8 +31,10 @@ app.use(
 //     cors()
 //   );
 
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
+app.use('/portfolios', portfoliosRouter);
+app.use('projects', projectsRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)
