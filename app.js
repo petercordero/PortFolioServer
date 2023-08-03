@@ -34,7 +34,7 @@ app.use(
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/portfolios', portfoliosRouter);
-app.use('projects', projectsRouter);
+app.use('/projects', projectsRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)

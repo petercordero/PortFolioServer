@@ -6,7 +6,7 @@ const User = require('../models/User');
 const isAuthenticated = require('../middleware/isAuthenticated')
 const isPortfolioOwner = require('../middleware/isPortfolioOwner')
 
-router.post('/new-project/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
+router.post('/add-project/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
     const { owner, title, link, image } = req.body
     Project.create(
         { owner,

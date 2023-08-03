@@ -19,10 +19,11 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/new-portfolio', isAuthenticated, (req, res, next) => {
-    const { owner, title } = req.body
+    const { owner, title, image } = req.body
     Portfolio.create(
         { owner,
             title,
+            image
         })
         .then((newPortfolio) => {
             res.json(newPortfolio)
@@ -33,11 +34,11 @@ router.post('/new-portfolio', isAuthenticated, (req, res, next) => {
         })
 })
 
-router.get('/portfolio-detail/:portfolioId', (req, res, next) => {
+router.get('/portfolio/:portfolioId', (req, res, next) => {
 
-    const { sockId } = req.params
+    const { portfolioId } = req.params
 
-    Portfolio.findById(sockId)
+    Portfolio.findById(portfolioId)
         .populate(
             "owner"
         )
@@ -45,8 +46,8 @@ router.get('/portfolio-detail/:portfolioId', (req, res, next) => {
             path: 'projects',
             populate: { path: 'owner'}
         })
-        .then((foundSock) => {
-            res.json(foundSock)
+        .then((foundPortfolio) => {
+            res.json(foundPortfolio)
         })
         .catch((err) => {
             console.log(err)
@@ -55,14 +56,15 @@ router.get('/portfolio-detail/:portfolioId', (req, res, next) => {
 
 })
 
-router.post('/portfolio-update/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
+router.post('/portfolio/edit/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
     const { portfolioId } = req.params
 
-    const { title } = req.body
+    const { title, image } = req.body
     Portfolio.findByIdAndUpdate(
         portfolioId,
         {
            title,
+           image
         },
         { new: true}
     )
