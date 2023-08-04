@@ -8,6 +8,13 @@ const isPortfolioOwner = require('../middleware/isPortfolioOwner')
 
 router.get('/', (req, res, next) => {
   Portfolio.find()
+  .populate(
+    "owner"
+)
+.populate({
+    path: 'projects',
+    populate: { path: 'owner'}
+})
   .then((allPortfolios) => {
     res.json(allPortfolios)
   })
@@ -21,7 +28,7 @@ router.get('/', (req, res, next) => {
 router.post('/new-portfolio', isAuthenticated, (req, res, next) => {
     const { owner, title, image } = req.body
     Portfolio.create(
-        { owner,
+        { owner: req.user._id,
             title,
             image
         })

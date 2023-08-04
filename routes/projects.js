@@ -2,21 +2,23 @@ var express = require('express');
 var router = express.Router();
 
 const Project = require('../models/Project');
+const Portfolio = require('../models/Portfolio')
 const User = require('../models/User');
 const isAuthenticated = require('../middleware/isAuthenticated')
 const isPortfolioOwner = require('../middleware/isPortfolioOwner')
 
-router.post('/add-project/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
-    const { owner, title, link, image } = req.body
+router.post('/', isAuthenticated, isPortfolioOwner, (req, res, next) => {
+    const { title, link, image, portfolioId } = req.body
     Project.create(
-        { owner,
+        { owner: req.user._id,
             title,
             link,
-            image
+            image,
+            portfolio: portfolioId
         })
         .then((newProject) => {
-            Portfolio.findByIdAndUpdate(
-                req.params.portfolioId,
+            return Portfolio.findByIdAndUpdate(
+                portfolioId, 
                 {
                     $push: {projects: newProject._id}
                 },

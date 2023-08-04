@@ -2,9 +2,9 @@ const Portfolio = require('../models/Portfolio');
 
 const isPortfolioOwner = (req, res, next) => {
 
-    Portfolio.findById(req.params.portfolioId)
+    Portfolio.findById(req.body.portfolioId)
     .then((foundPortfolio) => {
-        if (req.body.owner === foundPortfolio.owner.toString()){
+        if (req.user._id === foundPortfolio.owner.toString()){
             next()
         } else{
             res.status(401).json({message: "Validation error"})
