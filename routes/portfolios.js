@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose')
 
 const Portfolio = require('../models/Portfolio');
 const User = require('../models/User');
@@ -80,16 +81,29 @@ router.post('/portfolio/edit/:portfolioId', isAuthenticated, isPortfolioOwner, (
     })
 })
 
-router.post('/delete-portfolio/:sockId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
-    const { portfolioId } = req.params
+// router.post('/delete-portfolio/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
+//     const { portfolioId } = req.params
+//     Portfolio.findByIdAndDelete(portfolioId)
+//     .then((deletedPortfolio) => {
+//         res.json(deletedPortfolio)
+//     })
+//     .catch((err) => {
+//         console.log(err)
+//         next(err)
+//     })
+// })
+
+router.delete('/delete-portfolio/:portfolioId', (req, res, next) => {
+    const { portfolioId } = req.params;
+    
+    if (!mongoose.Types.ObjectId.isValid(portfolioId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+    }
+  
     Portfolio.findByIdAndDelete(portfolioId)
-    .then((deletedPortfolio) => {
-        res.json(deletedPortfolio)
-    })
-    .catch((err) => {
-        console.log(err)
-        next(err)
-    })
-})
+      .then(() => res.json({ message: `Portfolio with ${portfolioId} is removed successfully.` }))
+      .catch(error => res.json(error));
+  });
 
 module.exports = router;
