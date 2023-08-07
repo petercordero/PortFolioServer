@@ -2,8 +2,11 @@ const Portfolio = require('../models/Portfolio');
 
 const isPortfolioOwner = (req, res, next) => {
 
-    Portfolio.findById(req.body.portfolioId)
+    console.log("USER", req.user)
+
+    Portfolio.findById(req.params.portfolioId)
     .then((foundPortfolio) => {
+        console.log("found portfolio", foundPortfolio)
         if (req.user._id === foundPortfolio.owner.toString()){
             next()
         } else{
