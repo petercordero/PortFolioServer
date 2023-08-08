@@ -34,12 +34,14 @@ router.post('/new-portfolio', isAuthenticated, (req, res, next) => {
             image
         })
         .then((newPortfolio) => {
-            res.json(newPortfolio)
+            User.findByIdAndUpdate(req.user._id, {$push: { listedPortfolio: newPortfolio._id }})
+            .then(() => res.json(newPortfolio))  
         })
         .catch((err) => {
             console.log(err)
             next(err)
         })
+    
 })
 
 router.get('/portfolio/:portfolioId', (req, res, next) => {
@@ -66,13 +68,13 @@ router.get('/portfolio/:portfolioId', (req, res, next) => {
 
 router.post('/portfolio/edit/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
     const { portfolioId } = req.params
-
+    console.log(req.body)
     const { title, image } = req.body
     Portfolio.findByIdAndUpdate(
         portfolioId,
         {
-           title,
-           image
+           title: title,
+           image: image
         },
         { new: true}
     )
@@ -80,18 +82,6 @@ router.post('/portfolio/edit/:portfolioId', isAuthenticated, isPortfolioOwner, (
         res.json(updatedPortfolio)
     })
 })
-
-// router.post('/delete-portfolio/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
-//     const { portfolioId } = req.params
-//     Portfolio.findByIdAndDelete(portfolioId)
-//     .then((deletedPortfolio) => {
-//         res.json(deletedPortfolio)
-//     })
-//     .catch((err) => {
-//         console.log(err)
-//         next(err)
-//     })
-// })
 
 router.delete('/delete-portfolio/:portfolioId', (req, res, next) => {
     const { portfolioId } = req.params;

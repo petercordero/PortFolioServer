@@ -68,11 +68,11 @@ router.get('/delete/:userId', isAuthenticated, isProfileOwner, (req, res, next) 
       })
 })
 
-router.get('/profile', isAuthenticated, isProfileOwner, (req, res, next) => {
-  const userId = req.session.user._id;
+router.get('/profile/:userId', isAuthenticated,  (req, res, next) => {
+  const {userId} = req.params;
   User.findById(userId)
     .populate({
-      path: 'portfolios',
+      path: 'listedPortfolio',
       populate: {
         path: 'owner',
         model: 'User'
@@ -89,18 +89,18 @@ router.get('/profile', isAuthenticated, isProfileOwner, (req, res, next) => {
 });
 
 
-router.get("/portfolios/:userId", (req, res, next) => {
-  Portfolio.find({
-    owner: req.params.userId
-  })
-    .populate('owner')
-    .then((foundPortfolios) => {
-      res.json(foundPortfolios)
-    })
-    .catch((err) => {
-      console.log(err)
-      next(err)
-    })
-});
+// router.get("/portfolio/profile/:userId", (req, res, next) => {
+//   Portfolio.find({
+//     owner: req.params.userId
+//   })
+//     .populate('owner')
+//     .then((foundPortfolios) => {
+//       res.json(foundPortfolios)
+//     })
+//     .catch((err) => {
+//       console.log(err)
+//       next(err)
+//     })
+// });
 
 module.exports = router;

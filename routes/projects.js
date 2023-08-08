@@ -70,38 +70,6 @@ router.post('/edit/:portfolioId/:projectId', isAuthenticated, isPortfolioOwner, 
         })
 })
 
-router.post('/delete-project/:portfolioId/:projectId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
-    const { projectId } = req.params
-    Project.findByIdAndDelete(projectId)
-        .then((deletedProject) => {
-            Portfolio.findByIdAndUpdate(
-                req.params.portfolioId,
-                {
-                    $pull: { projects: deletedProject._id }
-                },
-                { new: true }
-            )
-                .populate(
-                    "owner"
-                )
-                .populate({
-                    path: 'projects',
-                    populate: { path: 'owner' }
-                })
-                .then((updatedPortfolio) => {
-                    res.json(updatedPortfolio)
-                })
-                .catch((err) => {
-                    console.log(err)
-                    next(err)
-                })
-        })
-        .catch((err) => {
-            console.log(err)
-            next(err)
-        })
-})
-
 router.delete('/delete-project/:portfolioId/:projectId', (req, res, next) => {
     const { projectId, portfolioId } = req.params;
 
@@ -109,7 +77,6 @@ router.delete('/delete-project/:portfolioId/:projectId', (req, res, next) => {
         res.status(400).json({ message: 'Specified id is not valid' });
         return;
     }
-    //before sending res.json, findByIdAndUpdate the portfolio using $pull to delete the project from the portfolio
 
     Project.findByIdAndDelete(projectId)
         .then(() => {
