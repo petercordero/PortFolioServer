@@ -4,7 +4,6 @@ var mongoose = require('mongoose')
 
 const Project = require('../models/Project');
 const Portfolio = require('../models/Portfolio')
-const User = require('../models/User');
 const isAuthenticated = require('../middleware/isAuthenticated')
 const isPortfolioOwner = require('../middleware/isPortfolioOwner')
 
@@ -48,15 +47,11 @@ router.post('/:portfolioId', isAuthenticated, isPortfolioOwner, (req, res, next)
         })
 })
 
-
 router.post('/edit/:portfolioId/:projectId', isAuthenticated, isPortfolioOwner, (req, res, next) => {
-
-
     const { projectId } = req.params
 
     console.log("req.params", req.params)
     console.log("req.body", req.body)
-
 
     Project.findByIdAndUpdate(
         projectId,
@@ -91,7 +86,5 @@ router.delete('/delete-project/:portfolioId/:projectId', (req, res, next) => {
         })
 
 });
-
-
 
 module.exports = router;

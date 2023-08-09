@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var portfoliosRouter = require('./routes/portfolios')
 var projectsRouter = require('./routes/projects')
+var imageRouter = require('./routes/image')
 
 var app = express();
 
@@ -24,7 +25,7 @@ app.enable('trust proxy');
 
 app.use(
     cors({
-      origin: ['http://localhost:5173']  // <== URL of our future React app
+      origin: ['http://localhost:5173']
     })
   );
 // app.use(
@@ -35,6 +36,7 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/portfolios', portfoliosRouter);
 app.use('/projects', projectsRouter);
+app.use('/image', imageRouter)
 
 mongoose
   .connect(process.env.MONGODB_URI)

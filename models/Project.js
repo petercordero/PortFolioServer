@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose')
 
 const projectSchema = new Schema(
     {
-        owner: {type: Schema.Types.ObjectId, ref: 'User'},
+        owner: { type: Schema.Types.ObjectId, ref: 'User' },
         title: String,
         link: String,
         description: String,
