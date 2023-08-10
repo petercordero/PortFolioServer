@@ -25,7 +25,7 @@ app.enable('trust proxy');
 
 app.use(
     cors({
-      origin: ['http://localhost:5173']
+      origin: [process.env.REACT_APP_URI]
     })
   );
 // app.use(
