@@ -11,22 +11,21 @@ router.post("/signup", (req, res, next) => {
   const { email, password, fullName, location } = req.body;
 
   if (email === "" || password === "" || fullName === "" || location === "") {
-    res.status(400).json({ message: "Provide email, password, full name, and location" });
+    res.status(400).json({ message: "Please provide an email, password, full name, and location." });
     return;
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
-    res.status(400).json({ message: "Provide a valid email address." });
+    res.status(400).json({ message: "Please provide a valid email address." });
     return;
   }
 
-  // Use regex to validate the password format
-  // const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-  // if (!passwordRegex.test(password)) {
-  //   res.status(400).json({ message: 'Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.' });
-  //   return;
-  // }
+  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  if (!passwordRegex.test(password)) {
+    res.status(400).json({ message: 'Password must contain at least 6 characters and at least one number, one lowercase character, and one uppercase character.' });
+    return;
+  }
 
   User.findOne({ email })
     .then((foundUser) => {
@@ -68,7 +67,7 @@ router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 
   if (email === "" || password === "") {
-    res.status(400).json({ message: "Provide email and password." });
+    res.status(400).json({ message: "Please provide an email and password." });
     return;
   }
 
